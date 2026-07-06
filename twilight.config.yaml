@@ -1,0 +1,260 @@
+site:
+  siteURL: "https://twilight.spr-aachen.com/"
+  title: "HiuHiu Blog"
+  subtitle: "Personal research notes, pwn writeups, and techniques"
+  lang: "en"
+  translate:
+    enable: true
+    service: "client.edge"
+    showSelectTag: false
+    autoDiscriminate: true
+    ignoreClasses:
+      - "ignore"
+      - "banner-title"
+      - "banner-subtitle"
+    ignoreTags:
+      - "script"
+      - "style"
+      - "code"
+      - "pre"
+  timeZone: 7
+  font:
+    "Example - ZenMaruGothic":
+      src: "https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic&display=swap"
+      family: "Zen Maru Gothic"
+  themeColor:
+    hue: 255
+  defaultTheme: "dark"
+  wallpaper:
+    mode: "banner"
+    src:
+      desktop:
+        - "/assets/images/desktopWallpaper_1.jpg"
+        - "/assets/images/desktopWallpaper_2.jpg"
+        - "/assets/images/desktopWallpaper_3.jpg"
+      mobile:
+        - "/assets/images/mobileWallpaper_1.jpg"
+        - "/assets/images/mobileWallpaper_2.jpg"
+    position: "center"
+    carousel:
+      enable: true
+      interval: 3.6
+      kenBurns: true
+    banner:
+      homeText:
+        enable: true
+        title: "HiuHiu Blog"
+        subtitle:
+          - "Research notes, pwn writeups, and exploitation techniques."
+          - "The best revenge is to simply improve yourself."
+        typewriter:
+          enable: true
+          speed: 111
+          deleteSpeed: 51
+          pauseTime: 3000
+      credit:
+        enable: false
+        text: "Describe"
+        url: ""
+      navbar:
+        transparentMode: "semifull"
+      waves:
+        enable: true
+        performanceMode: false
+    fullscreen:
+      zIndex: -1
+      opacity: 0.9
+      blur: 1
+      navbar:
+        transparentMode: "semi"
+  loadingOverlay:
+    enable: true
+    waitForAllResources: true
+    title:
+      enable: true
+      content: "LOADING"
+      interval: 1.5
+    spinner:
+      enable: true
+      interval: 1.5
+  favicon: []
+  bangumi:
+    userId: "your-bangumi-id"
+  generateOgImages: false
+
+analytics:
+  enabled: false
+  platform: "umami"
+  umami:
+    baseUrl: "https://api.umami.is"
+    apiKey: ""
+    code: ""
+
+navbar:
+  links:
+    - "Home"
+    - name: "Research"
+      url: "/research/"
+      icon: "material-symbols:book-2-outline-rounded"
+      description: "Research docs for security bugs and vulnerability analysis."
+    - name: "CTF - Writeup"
+      url: "/ctf-writeup/"
+      icon: "material-symbols:flag-outline-rounded"
+      description: "Pwn writeups from CTF competitions."
+    - name: "Techniques"
+      url: "/techniques/"
+      icon: "material-symbols:psychology"
+      description: "Reusable pwn tricks, notes, and exploitation patterns."
+    - name: "Timeline"
+      url: "/timeline/"
+      icon: "material-symbols:timeline"
+      description: "Personal timeline placeholder. I will complete this page later."
+    - "About"
+
+sidebar:
+  components:
+    left:
+      - type: "directory"
+        position: "sticky"
+      - type: "categories"
+        position: "sticky"
+        responsive:
+          collapseThreshold: 5
+        depth: 3
+      - type: "tags"
+        position: "sticky"
+        responsive:
+          collapseThreshold: 20
+    right:
+      - type: "profile"
+        position: "top"
+        visibility:
+          mode: "exclude"
+          paths: ["^/posts/", "^/archive"]
+      - type: "announcement"
+        position: "top"
+        visibility:
+          mode: "exclude"
+          paths: ["^/posts/", "^/archive"]
+      - type: "toc"
+        position: "sticky"
+        depth: 3
+      - type: "statistics"
+        position: "sticky"
+        visibility:
+          mode: "include"
+          paths: ["^/$", "^/archive$"]
+
+profile:
+  avatar: "/assets/images/linhly.jpg"
+  name: "HiuHiu"
+  bio: "Basic Pwn learner."
+  links:
+    - name: "GitHub"
+      icon: "fa6-brands:github"
+      url: "https://github.com/HiuHiuByRice"
+    - name: "Discord"
+      icon: "fa6-brands:discord"
+      url: "https://discord.com/users/868319828501483560"
+
+announcement:
+  title: "This Blog"
+  content: "Research, CTF pwn writeups, and reusable exploitation techniques live here."
+  closable: true
+  link:
+    enable: true
+    text: "About Me"
+    url: "/about/"
+    external: false
+
+post:
+  card:
+    cover:
+      side: "left"
+      width: "33%"
+      showContent: true
+      showDefaultCover: true
+    titleSize: "text-2xl"
+  showLastModified: true
+  expressiveCode:
+    theme: "github-dark"
+  license:
+    enable: true
+    name: "CC BY-NC-SA 4.0"
+    url: "https://creativecommons.org/licenses/by-nc-sa/4.0/"
+  comment:
+    enable: false
+    provider:
+    waline:
+      serverURL: ""
+      lang: ""
+    twikoo:
+      envId: ""
+      lang: ""
+
+footer:
+  enable: false
+  customHtml: ""
+
+particle:
+  enable: true
+  particleNum: 12
+  limitTimes: -1
+  size:
+    min: 0.3
+    max: 0.9
+  opacity:
+    min: 0.3
+    max: 0.9
+  speed:
+    horizontal:
+      min: -0.9
+      max: 0.9
+    vertical:
+      min: 0.15
+      max: 0.3
+    rotation: 0.12
+    fadeSpeed: 0.12
+  zIndex: 100
+
+musicPlayer:
+  enable: false
+  mode: "meting"
+  meting:
+    meting_api: "https://meting.spr-aachen.com/api"
+    server: "netease"
+    type: "playlist"
+    id: "2161912966"
+  local:
+    playlist:
+      - id: 1
+        title: "深海之息"
+        artist: "Youzee Music"
+        cover: "https://p1.music.126.net/PhKOqFtljgHDDpKYM2ADUA==/109951169858309716.jpg"
+        url: "assets/music/深海之息.m4a"
+        lrc: "assets/music/深海之息.lrc"
+        duration: 146
+  autoplay: true
+
+pio:
+  enable: false
+  models:
+    - "/pio/models/pio/model.json"
+  position: "left"
+  width: 280
+  height: 250
+  mode: "draggable"
+  hiddenOnMobile: true
+  dialog:
+    welcome: "Welcome!"
+    touch:
+      - "What are you doing?"
+      - "Stop touching me!"
+      - "Don't bully me like that!"
+      - "(｡í _ ì｡)"
+    home: "Click here to go back to homepage!"
+    skin:
+      - "Want to see my new outfit?"
+      - "The new outfit looks great~"
+    close: "See you next time~"
+    link: "https://nav.kungal.org"

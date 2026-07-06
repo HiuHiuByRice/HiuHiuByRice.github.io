@@ -1,0 +1,21 @@
+ {
+    "title": "Joined KCSC",
+    "description": "Started focusing on Pwn and Binary Exploitation.",
+    "type": "achievement",
+    "startDate": "2025-02-19",
+    "location": "Vietnam",
+    "organization": "KCSC",
+    "position": "Member",
+    "skills": ["CTF", "Pwn", "Linux", "Windows Kernel"],
+    "achievements": ["Began playing CTF and Research on Windows Kernel Drivers"],
+    "links": [
+      {
+        "name": "GitHub",
+        "url": "https://github.com/HiuHiuByRice",
+        "type": "other"
+      }
+    ],
+    "icon": "material-symbols:flag-outline-rounded",
+    "color": "#2563eb",
+    "featured": true
+ }

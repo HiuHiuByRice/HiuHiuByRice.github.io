@@ -1,0 +1,85 @@
+---
+import type { CollectionEntry } from "astro:content";
+import { Icon } from "astro-icon/components";
+
+import BackwardButton from "@components/backwardButton.astro";
+import PostCard from "@components/post/postCard.astro";
+import GridLayout from "@layouts/grid.astro";
+
+
+interface Props {
+    title: string;
+    description: string;
+    intro: string;
+    icon: string;
+    currentPath: string;
+    posts: CollectionEntry<"posts">[];
+}
+
+const {
+    title,
+    description,
+    intro,
+    icon,
+    currentPath,
+    posts,
+} = Astro.props;
+
+let delay = 0;
+const interval = 30;
+---
+
+<GridLayout title={title} description={description}>
+    <div class="flex w-full rounded-(--radius-large) overflow-hidden relative min-h-32">
+        <div class="card-base z-10 px-9 py-6 relative w-full">
+            <BackwardButton currentPath={currentPath} />
+            <header class="mb-8">
+                <div class="flex items-center gap-3 mb-3">
+                    <div class="section-icon">
+                        <Icon name={icon} class="text-2xl" />
+                    </div>
+                    <h1 class="text-3xl font-bold text-neutral-900 dark:text-neutral-100">
+                        {title}
+                    </h1>
+                </div>
+                <p class="text-neutral-600 dark:text-neutral-400 mb-3">
+                    {description}
+                </p>
+                <p class="text-sm text-neutral-500 dark:text-neutral-500">
+                    {intro}
+                </p>
+            </header>
+
+            {posts.length > 0 ? (
+                <div class="transition flex flex-col gap-3 py-1 md:py-0 md:gap-4">
+                    {posts.map((entry) => (
+                        <PostCard
+                            entry={entry}
+                            class:list="onload-animation-up"
+                            style={`animation-delay: ${delay++ * interval}ms;`}
+                        />
+                    ))}
+                </div>
+            ) : (
+                <div class="rounded-2xl border border-dashed border-neutral-300 dark:border-neutral-700 bg-white/50 dark:bg-white/5 px-6 py-6">
+                    <p class="text-base font-semibold text-neutral-900 dark:text-neutral-100 mb-2">
+                        No posts in this section yet.
+                    </p>
+                </div>
+            )}
+        </div>
+    </div>
+</GridLayout>
+
+<style>
+    .section-icon {
+        width: 2.75rem;
+        height: 2.75rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 999px;
+        background: color-mix(in oklch, var(--primary), transparent 86%);
+        color: var(--primary);
+    }
+</style>

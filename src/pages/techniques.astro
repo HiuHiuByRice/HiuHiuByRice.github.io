@@ -1,0 +1,26 @@
+---
+export const prerender = true;
+
+
+import SectionPostListPage from "@components/sectionPostListPage.astro";
+import { BLOG_SECTION_PAGES } from "@constants/blog-taxonomy";
+import { getSortedPostsByCategoryRoot } from "@utils/post";
+
+
+const section = BLOG_SECTION_PAGES.find((item) => item.slug === "techniques");
+
+if (!section) {
+    throw new Error("Techniques section config not found");
+}
+
+const posts = await getSortedPostsByCategoryRoot(section.title);
+---
+
+<SectionPostListPage
+    title={section.title}
+    description={section.description}
+    intro={section.intro}
+    icon={section.icon}
+    currentPath={Astro.url.pathname}
+    posts={posts}
+/>
