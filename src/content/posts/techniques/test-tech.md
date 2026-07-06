@@ -1,7 +1,7 @@
 ---
 title: Heap Fundamental
 published: 2025-05-02
-updated:
+updated: 2025-05-02
 description: "Heap Basic"
 cover: "/assets/images/linhly.jpg"
 coverInContent: false
