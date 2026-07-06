@@ -1,8 +1,8 @@
 ---
-title: Test tech
-published: 2026-07-06
+title: Heap Fundamental
+published: 2025-05-02
 updated:
-description: "Test tech"
+description: "Heap Basic"
 cover: "/assets/images/linhly.jpg"
 coverInContent: false
 category:
