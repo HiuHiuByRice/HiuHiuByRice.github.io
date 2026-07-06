@@ -1,0 +1,114 @@
+---
+export const prerender = true;
+
+
+import BackwardButton from "@components/backwardButton.astro";
+import TimelineItem from "@components/data/timelineItem.astro";
+import GridLayout from "@layouts/grid.astro";
+import {
+    getCurrentItems,
+    getTimelineByType,
+    getTimelineStats,
+} from "@utils/timeline";
+
+
+const title = "Timeline";
+const description = "A running timeline of milestones, projects, and personal notes.";
+const stats = getTimelineStats();
+const currentItems = getCurrentItems();
+const allTimelineItems = getTimelineByType();
+const timelineExample = `{
+  "title": "Joined KCSC",
+  "description": "Started focusing on pwn and binary exploitation.",
+  "type": "achievement",
+  "startDate": "2026-07-06",
+  "endDate": "",
+  "skills": ["Pwn", "Linux"],
+  "links": [],
+  "icon": "material-symbols:flag-outline-rounded",
+  "featured": true
+}`;
+---
+
+<GridLayout title={title} description={description}>
+    <div class="flex w-full rounded-(--radius-large) overflow-hidden relative min-h-32">
+        <div class="card-base z-10 px-9 py-6 relative w-full">
+            <BackwardButton currentPath={Astro.url.pathname} />
+
+            <header class="mb-8">
+                <h1 class="text-3xl font-bold text-neutral-900 dark:text-neutral-100 mb-3">
+                    {title}
+                </h1>
+                <p class="text-neutral-600 dark:text-neutral-400">
+                    {description}
+                </p>
+            </header>
+
+            {allTimelineItems.length > 0 ? (
+                <>
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+                        <div class="rounded-xl p-4 bg-linear-to-br from-slate-50 to-slate-100 dark:from-slate-900/30 dark:to-slate-800/30">
+                            <div class="text-2xl font-bold text-slate-700 dark:text-slate-200">{stats.total}</div>
+                            <div class="text-sm text-slate-500 dark:text-slate-400">Total items</div>
+                        </div>
+                        <div class="rounded-xl p-4 bg-linear-to-br from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20">
+                            <div class="text-2xl font-bold text-blue-700 dark:text-blue-300">{stats.byType.achievement}</div>
+                            <div class="text-sm text-blue-600/80 dark:text-blue-300/80">Achievements</div>
+                        </div>
+                        <div class="rounded-xl p-4 bg-linear-to-br from-emerald-50 to-emerald-100 dark:from-emerald-900/20 dark:to-emerald-800/20">
+                            <div class="text-2xl font-bold text-emerald-700 dark:text-emerald-300">{stats.byType.project}</div>
+                            <div class="text-sm text-emerald-600/80 dark:text-emerald-300/80">Projects</div>
+                        </div>
+                        <div class="rounded-xl p-4 bg-linear-to-br from-amber-50 to-amber-100 dark:from-amber-900/20 dark:to-amber-800/20">
+                            <div class="text-2xl font-bold text-amber-700 dark:text-amber-300">{currentItems.length}</div>
+                            <div class="text-sm text-amber-600/80 dark:text-amber-300/80">Ongoing</div>
+                        </div>
+                    </div>
+
+                    {currentItems.length > 0 && (
+                        <section class="mb-10">
+                            <h2 class="text-2xl font-semibold text-neutral-900 dark:text-neutral-100 mb-4">
+                                Current
+                            </h2>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                {currentItems.map((item) => (
+                                    <TimelineItem item={item} layout="card" size="medium" showTimeline={false} />
+                                ))}
+                            </div>
+                        </section>
+                    )}
+
+                    <section>
+                        <h2 class="text-2xl font-semibold text-neutral-900 dark:text-neutral-100 mb-6">
+                            History
+                        </h2>
+                        <div class="relative space-y-8">
+                            <div class="absolute left-6 top-0 bottom-0 w-0.5 bg-black/10 dark:bg-white/10"></div>
+                            {allTimelineItems.map((item) => (
+                                <TimelineItem item={item} layout="timeline" size="medium" showTimeline={true} />
+                            ))}
+                        </div>
+                    </section>
+                </>
+            ) : (
+                <div class="space-y-6 text-neutral-700 dark:text-neutral-300">
+                    <section class="rounded-2xl border border-neutral-200 dark:border-neutral-800 bg-white/50 dark:bg-white/5 px-6 py-5">
+                        <h2 class="text-xl font-semibold text-neutral-900 dark:text-neutral-100 mb-2">
+                            No timeline items yet
+                        </h2>
+                        <p class="mb-3">
+                            Add JSON files inside <code>src/content/timeline/</code> and they will appear here automatically.
+                        </p>
+                    </section>
+
+                    <section class="rounded-2xl border border-neutral-200 dark:border-neutral-800 bg-white/50 dark:bg-white/5 px-6 py-5">
+                        <h2 class="text-xl font-semibold text-neutral-900 dark:text-neutral-100 mb-2">
+                            Minimal JSON example
+                        </h2>
+                        <pre class="overflow-x-auto rounded-xl bg-neutral-950 text-neutral-100 p-4 text-sm leading-6"><code>{timelineExample}</code></pre>
+                    </section>
+                </div>
+            )}
+        </div>
+    </div>
+</GridLayout>

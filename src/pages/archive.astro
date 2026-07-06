@@ -1,0 +1,35 @@
+---
+import { getSortedPostsList } from "@utils/post";
+import ArchivePanel from "@components/archivePanel.svelte";
+import GridLayout from "@layouts/grid.astro";
+import BackwardButton from "@components/backwardButton.astro";
+
+
+const pageTitle = "Archive";
+const pageDescription = "A chronological timeline of every published note on this blog.";
+
+const sortedPostsList = await getSortedPostsList();
+---
+
+<GridLayout title={pageTitle} description={pageDescription}>
+    <div class="flex w-full rounded-(--radius-large) overflow-hidden relative min-h-32">
+        <div class="card-base z-10 px-9 py-6 relative w-full ">
+            <BackwardButton currentPath={Astro.url.pathname} />
+            <header class="mb-8">
+                <h1 class="text-3xl font-bold text-neutral-900 dark:text-neutral-100 mb-3">
+                    {pageTitle}
+                </h1>
+                <p class="text-neutral-600 dark:text-neutral-400">
+                    {pageDescription}
+                </p>
+            </header>
+            {sortedPostsList.length > 0 ? (
+                <ArchivePanel sortedPosts={sortedPostsList} client:idle></ArchivePanel>
+            ) : (
+                <div class="rounded-2xl border border-dashed border-neutral-300 dark:border-neutral-700 px-6 py-6 text-neutral-600 dark:text-neutral-400">
+                    No published posts yet.
+                </div>
+            )}
+        </div>
+    </div>
+</GridLayout>
