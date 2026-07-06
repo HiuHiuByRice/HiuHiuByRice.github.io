@@ -22,10 +22,10 @@ lang: ""
 - **Heap chunk**: Là một phần của vùng nhớ heap được tạo ra thông qua việc cấp phát để lưu trữ dữ liệu. Thực chất, vùng nhớ heap khi chưa có bất kì thao tác cấp phát động nào thì sẽ tồn tại trong một chunk thống nhất đó là **Top chunk**.
 ![{3198BEF7-4272-4D6C-99C6-C21A61972C05}](https://hackmd.io/_uploads/Hytua_Ukee.png)
 - Việc cấp phát động được thực hiện bởi các thao tác của các hàm:
-- - Malloc: `<data type>* pointer_name = malloc(size_t size);`. Thực hiện việc cấp phát một vùng nhớ với kích thước yêu cầu là `size` và trả về là con trỏ `pointer_name` trỏ đến đầu vùng nhớ vừa cấp phát. Nội dung của vùng nhớ chưa được khởi tạo trước và có thể chứa giá trị rác.
-- - Calloc: `<data type>* pointer_name = calloc(size_t amount, size_t size);`. Tương tự như `malloc()` nhưng ở đây nó thực hiện việc cấp phát một kích thước `amount * size` và khởi tạo toàn bộ dữ liệu trong vùng được cấp phát thành 0 (Zero init).
-- - Realloc: `<data type>* pointer_name = realloc(void *old_pointer, size_t size)`. Thực hiện việc thay đổi kích thước của vùng nhớ đã được cấp phát trước đó tại `old_pointer` thành `size`. Nếu cần, vùng nhớ mới sẽ được cấp phát và dữ liệu cũ sẽ được sao chép sang.
-- - Free: `free(pointer_name);`. Thực hiện việc giải phóng vùng nhớ được cấp phát thông qua con trỏ `pointer_name` trỏ đến vùng nhớ được cấp phát trước đó. 
+  - Malloc: `<data type>* pointer_name = malloc(size_t size);`. Thực hiện việc cấp phát một vùng nhớ với kích thước yêu cầu là `size` và trả về là con trỏ `pointer_name` trỏ đến đầu vùng nhớ vừa cấp phát. Nội dung của vùng nhớ chưa được khởi tạo trước và có thể chứa giá trị rác.
+  - Calloc: `<data type>* pointer_name = calloc(size_t amount, size_t size);`. Tương tự như `malloc()` nhưng ở đây nó thực hiện việc cấp phát một kích thước `amount * size` và khởi tạo toàn bộ dữ liệu trong vùng được cấp phát thành 0 (Zero init).
+  - Realloc: `<data type>* pointer_name = realloc(void *old_pointer, size_t size)`. Thực hiện việc thay đổi kích thước của vùng nhớ đã được cấp phát trước đó tại `old_pointer` thành `size`. Nếu cần, vùng nhớ mới sẽ được cấp phát và dữ liệu cũ sẽ được sao chép sang.
+  - Free: `free(pointer_name);`. Thực hiện việc giải phóng vùng nhớ được cấp phát thông qua con trỏ `pointer_name` trỏ đến vùng nhớ được cấp phát trước đó. 
 
 ### 2. Cấu tạo
 - Một heap chunk có cấu tạo thông thường gồm 2 phần là **Metadata** và **Content**.
