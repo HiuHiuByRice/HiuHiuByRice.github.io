@@ -9,13 +9,13 @@ category:
   - Techniques
 tags:
   - CTF
-  - Bof
-  - Windows
+  - Heap
+  - Linux
 draft: false
 lang: ""
 ---
 
-# KCSC Trainee Task 7: HEAP
+# HEAP BASIC
 ## I. Overview
 ### 1. Định nghĩa
 - **Heap**: là một vùng nhớ có chức năng chính là dùng cho việc cung cấp không gian vùng nhớ cho các dữ liệu cần lưu trữ (heap chunk) thông qua thao tác cấp phát động trong quá trình một chương trình đang thực thi.
@@ -29,27 +29,26 @@ lang: ""
 
 ### 2. Cấu tạo
 - Một heap chunk có cấu tạo thông thường gồm 2 phần là **Metadata** và **Content**.
-> Metadata:
-> -
-> - Có kích thước là 0x10 byte.
-> - Là các thông tin cơ bản của heap chunk sẽ bao gồm: **Chunk size**, **Flag mode**, **Previous size**.
-> ---
-> **Chunk size**:
-> - Là kích thước của chunk hiện tại (bao gồm cả metadata), được lưu ở 4 byte thứ 2 chunk ở kiến trúc 32 bit và 8 byte thứ 2 chunk ở kiến trúc 64 bit.
-> ---
-> **Previous size:**
-> - Là kích thước của chunk phía trước chunk hiện tại. Hỗ trợ trình quản lý heap trong các thao tác gộp chunk nếu cần thiết và thường nằm ở 8 byte trước chunk size. Thông số này sẽ được sử dụng khi chunk trước đó được free phục vụ cho quá trình gộp chunk đối với các chunk được free và đưa vào **unsorted bin**:
-> Giả sử ta tiến hành malloc 2 chunk với kích thước khác nhau và lớn hơn 0x400 byte và ta cho free trước chunk đầu tiên và khi đó tại metadata tại chunk 2 ta có:
->![{8A6ACEE4-81BA-4200-8A0B-29D0E8C0643F}](https://hackmd.io/_uploads/Symtl3v1ge.png)
-> ---
-> **Flag bit**: 
-> - Là bit thể hiện trạng thái của chunk và bit này có vị trí cũng ở đầu chunk và được cộng vào chunksize nhưng không làm ảnh hưởng đến kích thước thật sự của chunk và có dạng: `Chunk size + Flag bit`.
-> - Bao gồm 3 trạng thái:
->  > - **Previous chunk in use [0x01]** : bit này được thêm vào khi chunk ở phía trước của chunk hiện tại cũng đang được sử dụng và đây là flag của chunk phía nhưng lại nằm ở metadata của chunk hiện tại. Lí do cho việc này là do cơ chế **Coalesce** của trình quản lý heap. Cơ chế này cho phép việc gộp các chunk đã được free với mục đích nhằm tối ưu hóa, chống phân mảnh heap và giúp cho việc cấp phát cho các chunk có kích thước lớn hơn trong tương lai. Thông qua bit trạng thái trên, trình quản lý heap có thể biết được giới hạn của việc gộp chunk. 
->  > Giả sử ta có 3 chunk được khởi tạo và ta tiến hành free lần lượt chunk thứ 2:
->  > ![{B2B5470A-C7A9-4E5F-9441-408E8C38B53A}](https://hackmd.io/_uploads/SkvImhwkex.png)
->  > Ta thấy rằng chunk 2 được free và kéo theo đó prev_size của chunk 3 đang là size của chunk 2 nhưng lúc này bit flag của chunk 3 và 2 đều là 0. 
->  > Ở đây, **Bit flag [0x00]** có ý nghĩa là chunk trước đó đã bị free, không còn được sử dụng nữa và sẵn sàng cho việc gộp chunk, lúc này prev size tại metadata của chunk 3 là hợp lệ để sử dụng và thao tác cho việc gộp chunk và một khi chunk 3 được free thì chunk 2 và 3 sẽ bị gộp lại với nhau:
+#### 2.1 Metadata:
+- Có kích thước là 0x10 byte (64 bit) và là 0x8 byte (32 bit).
+- Là các thông tin cơ bản của heap chunk sẽ bao gồm: **Chunk size**, **Flag mode**, **Previous size**.
+
+##### 2.1.1 Chunk size:
+- Là kích thước của chunk hiện tại (bao gồm cả metadata), được lưu ở 4 byte thứ 2 chunk ở kiến trúc 32 bit và 8 byte thứ 2 chunk ở kiến trúc 64 bit.
+
+##### 2.1.2 Previous size:
+- Là kích thước của chunk phía trước chunk hiện tại. Hỗ trợ trình quản lý heap trong các thao tác gộp chunk nếu cần thiết và thường nằm ở 8 byte trước chunk size. Thông số này sẽ được sử dụng khi chunk trước đó được free phục vụ cho quá trình gộp chunk đối với các chunk được free và đưa vào **unsorted bin**:
+  - Giả sử ta tiến hành malloc 2 chunk với kích thước khác nhau và lớn hơn 0x400 byte và ta cho free trước chunk đầu tiên và khi đó tại metadata tại chunk 2 ta có:
+![{8A6ACEE4-81BA-4200-8A0B-29D0E8C0643F}](https://hackmd.io/_uploads/Symtl3v1ge.png)
+
+##### 2.1.3 Flag bit: 
+- Là bit thể hiện trạng thái của chunk và bit này có vị trí cũng ở đầu chunk và được cộng vào chunksize nhưng không làm ảnh hưởng đến kích thước thật sự của chunk và có dạng: `Chunk size + Flag bit`.
+- Bao gồm 3 trạng thái:
+  - **Previous chunk in use [0x01]** : bit này được thêm vào khi chunk ở phía trước của chunk hiện tại cũng đang được sử dụng và đây là flag của chunk phía nhưng lại nằm ở metadata của chunk hiện tại. Lí do cho việc này là do cơ chế **Coalesce** của trình quản lý heap. Cơ chế này cho phép việc gộp các chunk đã được free với mục đích nhằm tối ưu hóa, chống phân mảnh heap và giúp cho việc cấp phát cho các chunk có kích thước lớn hơn trong tương lai. Thông qua bit trạng thái trên, trình quản lý heap có thể biết được giới hạn của việc gộp chunk. 
+- Giả sử ta có 3 chunk được khởi tạo và ta tiến hành free lần lượt chunk thứ 2:
+![{B2B5470A-C7A9-4E5F-9441-408E8C38B53A}](https://hackmd.io/_uploads/SkvImhwkex.png)
+Ta thấy rằng chunk 2 được free và kéo theo đó prev_size của chunk 3 đang là size của chunk 2 nhưng lúc này bit flag của chunk 3 và 2 đều là 0. 
+Ở đây, **Bit flag [0x00]** có ý nghĩa là chunk trước đó đã bị free, không còn được sử dụng nữa và sẵn sàng cho việc gộp chunk, lúc này prev size tại metadata của chunk 3 là hợp lệ để sử dụng và thao tác cho việc gộp chunk và một khi chunk 3 được free thì chunk 2 và 3 sẽ bị gộp lại với nhau:
 >  > ![{CAFD78F4-945B-4938-80B6-0A4A0870E668}](https://hackmd.io/_uploads/H1sRbhw1lx.png)
 >  > Theo format của gdb thì lúc này cả 2 chunk đều có cùng màu, chứng tỏ 2 chunk đã gộp với nhau và ta có thể kiểm chứng:
 >  > ![{9C579CBF-69B3-4B08-98EA-D2700AFAB372}](https://hackmd.io/_uploads/By6Kf2Pyex.png)
