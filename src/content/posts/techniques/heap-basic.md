@@ -200,7 +200,7 @@ Hàm `free()` cũng có cơ chế nhằm chống lại kĩ thuật này tùy thu
 Nghĩa là sau khi vào **Tcache** các chunk sẽ có con trỏ để trỏ đến các chunk tiếp theo trong ngăn xếp và ta sẽ thay đổi con trỏ đó và kéo theo là việc chunk ở phía trước cũng sẽ thay đổi thành địa chỉ ta mong muốn, phục vụ cho công việc khai thác.
 
 ## III. Practice Task Challenge
-Với 2 kĩ thuật trên thì ở mỗi kĩ thuật còn có cách áp dụng và khai thác khác nhau dựa vào phiên bản của Glibc và đặc trưng của phiên bản đó.
+- Với 2 kĩ thuật trên thì ở mỗi kĩ thuật còn có cách áp dụng và khai thác khác nhau dựa vào phiên bản của Glibc và đặc trưng của phiên bản đó.
 ---
 
 ### 1. Double Free
