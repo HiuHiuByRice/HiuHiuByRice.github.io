@@ -15,8 +15,8 @@ draft: false
 lang: ""
 ---
 
-# I. Overview
-## 1. Định nghĩa
+# Overview
+## Định nghĩa
 **Heap**: là một vùng nhớ có chức năng chính là dùng cho việc cung cấp không gian vùng nhớ cho các dữ liệu cần lưu trữ (heap chunk) thông qua thao tác cấp phát động trong quá trình một chương trình đang thực thi.
 
 **Heap chunk**: Là một phần của vùng nhớ heap được tạo ra thông qua việc cấp phát để lưu trữ dữ liệu. Thực chất, vùng nhớ heap khi chưa có bất kì thao tác cấp phát động nào thì sẽ tồn tại trong một chunk thống nhất đó là **Top chunk**.
@@ -31,23 +31,23 @@ Việc cấp phát động được thực hiện bởi các thao tác của cá
 
 - Free: `free(pointer_name);`. Thực hiện việc giải phóng vùng nhớ được cấp phát thông qua con trỏ `pointer_name` trỏ đến vùng nhớ được cấp phát trước đó. 
 
-## 2. Cấu tạo
+## Cấu tạo
 ---
-### 2.1 Metadata:
+### Metadata:
 Có kích thước là `0x10 byte (64 bit)` và là `0x8 byte (32 bit)`.
 
 Là các thông tin cơ bản của heap chunk sẽ bao gồm: **Chunk size**, **Flag mode**, **Previous size**.
 
-#### 2.1.1 Chunk size:
+#### Chunk size:
 Là kích thước của chunk hiện tại (bao gồm cả metadata), được lưu ở 4 byte thứ 2 chunk ở kiến trúc 32 bit và 8 byte thứ 2 chunk ở kiến trúc 64 bit.
 
-#### 2.1.2 Previous size:
+#### Previous size:
 Là kích thước của chunk phía trước chunk hiện tại. Hỗ trợ trình quản lý heap trong các thao tác gộp chunk nếu cần thiết và thường nằm ở 8 byte trước chunk size. Thông số này sẽ được sử dụng khi chunk trước đó được free phục vụ cho quá trình gộp chunk đối với các chunk được free và đưa vào **unsorted bin**:
 
 Giả sử ta tiến hành malloc 2 chunk với kích thước khác nhau và lớn hơn 0x400 byte và ta cho free trước chunk đầu tiên và khi đó tại metadata tại chunk 2 ta có:
 ![prev_sz](./heap-basic/2.png)
 
-#### 2.1.3 Flag bit: 
+#### Flag bit: 
 Là bit thể hiện trạng thái của chunk và bit này có vị trí cũng ở đầu chunk và được cộng vào chunksize nhưng không làm ảnh hưởng đến kích thước thật sự của chunk và có dạng: `Chunk size + Flag bit`.
 
 Bao gồm 3 trạng thái:
@@ -78,7 +78,7 @@ Bao gồm 3 trạng thái:
 
 - **Non in main arena [0x04]** : bit này được thêm vào khi heap chunk không nằm trong tiến trình chính (main arena), thường được thêm vào khi sử dụng các heap chunk được cấp phát trong multi-threading hoặc khi sử dụng nhiều arena khác nhau. Mặc định chương trình luôn tồn tại main arena nhưng nếu chương trình tiến hành sử dụng nhiều thread (multi-threading) và mỗi thread có thể dùng arena riêng, mặc dù các thread đều có các context riêng (thanh ghi, stack, ...) nhưng chúng đều chia sẻ chung một vùng nhớ heap với tiến trình chính và khi đó thao tác cấp phát động trả về chunk thuộc arena của riêng thread con và flag này được thêm vào chunk đó.
 
-### 2.2 Content:
+### Content:
 Có kích thước là kích thước được yêu cầu để cấp phát động bởi người dùng thông qua chương trình và là nơi lưu trữ các dữ liệu.
 
 Ta có cấu tạo tổng thể của một heap chunk:
@@ -87,14 +87,14 @@ Ta có cấu tạo tổng thể của một heap chunk:
 
 Thông thường, với việc được yêu cầu cấp phát động một chunk với kích thước yêu cầu thì trình quản lý heap sẽ phải cấp phát một chunk có kích thước lớn hơn kích thước yêu cầu để dành nó cho metadata và đồng thời là để căn chỉnh chunk.
 
-### 2.3 Sự căn chỉnh heap chunk:
+### Sự căn chỉnh heap chunk:
 Một heap chunk thông thường có kích thước hợp lệ là một số chia hết cho 8 (kiến trúc 32 bit) và chia hết cho 16 (kiến trúc 64 bit). 
 > Lí do cho việc căn chỉnh này là vì một vùng heap có thể chứa các thông tin vói kiểu dữ liệu khác nhau và vì chúng không được biết trước loại dữ liệu gì sẽ được lưu nên trình quản lý heap sẽ phải mặc định sự căn chỉnh trên cho phù hợp với việc lưu trữ các thông tin với các kiểu dữ liệu khác nhau.
 
-## 3. Các loại ngăn xếp trong quản lý heap
+## Các loại ngăn xếp trong quản lý heap
 --- 
 Khi một chunk được free thì trước khi được trả về cho **Top chunk** hoặc cho hệ điều hành thì với mục đích tối ưu hóa hiệu năng cấp phát, các chunk sẽ được đưa vào các ngăn xếp để có thể tái sử dụng cho các phần cấp phát trong tương lai. 
-### 3.1 Fastbin
+### Fastbin
 --- 
 Là một ngăn xếp các chunk có kích thước nhỏ từ 0x20 byte đến 0x80 byte (64 bit) và từ 0x10 đến 0x50 (32 bit). 
 
@@ -112,7 +112,7 @@ Sau đó ta sẽ tiến hành `malloc` lại một chunk có cùng kích thướ
 
 Fast bin lúc này chỉ còn lại chunk 1 và chunk 2 đã được cấp phát lại.
 
-### 3.2 Tcache
+### Tcache bin
 ---
 Tương tự như **Fast bin** nhưng đây là một tính năng lưu chữ chunk tối ưu được thêm vào từ phiên bản libc 2.26 trở lên. 
 
@@ -129,7 +129,7 @@ Và khi ta cấp phát một chunk mới thì nó sẽ lấy chunk có size hợ
 ![tcache_alloc](./heap-basic/14.png)
 
 
-### 3.3 Unsorted bin
+### Unsorted bin
 ---
 **Unsorted bin** là nơi lưu trữ các chunk đã được giải phóng nhưng kích thước đã vượt quá kích thước của **Tcache** hoặc hợp lệ nhưng trong **Tcache** đã có đủ chunk ở cùng một mức kích thước. Các chunk trong **Unsorted bin** được lưu với cơ chế liên kết đôi:
 
@@ -157,7 +157,7 @@ Ngoài ra trong **Unsorted bin**, để chống phân mảnh heap và tối ưu 
 > Nếu ta cần cấp phát một chunk có kích thước ví dụ là 0x200 byte thì khi đó trình quản lý heap sẽ cắt trực tiếp từ chunk mới được hợp thành và cung cấp cho người dùng.
 > ![unsorted_bin_alloc](./heap-basic/19.png)
 
-### 3.4 Small bin/Large bin
+### Small bin/Large bin
 ---
 Khi một chunk có kích thước không phù hợp với **Tcache** và **Fastbin** được free và đưa vào **Unsorted bin**, sau đó tiến hành cấp phát một chunk có kích thước không phù hợp với chunk hiện tại trong **Unsorted bin** thì chunk trong **Unsorted bin** sẽ được đưa và **Large bin/Small bin** tùy thuộc vào kích thước của nó:
 - **`Small bin`**: Dành cho các chunk có kích thước <= 0x400 byte / 0x200 byte.
@@ -175,7 +175,7 @@ Các chunk được lưu trữ tại **Small bin** và **Large bin** đều ở 
 > 
 > Vì kích thước của chunk có sẵn trong **Unsorted bin** là không đủ cho kích thước của chunk yêu cầu nên chunk này sẽ được cắt từ **Top chunk** và cấp phát cho người dùng, đồng thời trình quản lý heap cũng sắp xếp chunk trong **Unsorted bin** vào **Large bin** đợi cho lượt sử dụng tiếp theo.
 
-# II. Common bugs & exploit techniques 
+# Common bugs & exploit techniques 
 Ở phần kiến thức Heap này, ta có 2 kĩ thuật khai thác cơ bản đó là **Double Free** và **Tcache Poisoning**. 2 kĩ thuật này đều tận dụng lỗ hỏng **Use After Free** là nền tảng khai thác:
 
 ## Use After Free
@@ -198,11 +198,11 @@ Hàm `free()` cũng có cơ chế nhằm chống lại kĩ thuật này tùy thu
 
 Nghĩa là sau khi vào **Tcache** các chunk sẽ có con trỏ để trỏ đến các chunk tiếp theo trong ngăn xếp và ta sẽ thay đổi con trỏ đó và kéo theo là việc chunk ở phía trước cũng sẽ thay đổi thành địa chỉ ta mong muốn, phục vụ cho công việc khai thác.
 
-# III. Practice Task Challenge
+# Practice Task Challenge
 - Với 2 kĩ thuật trên thì ở mỗi kĩ thuật còn có cách áp dụng và khai thác khác nhau dựa vào phiên bản của Glibc và đặc trưng của phiên bản đó.
 ---
 
-## 1. Double Free
+## Double Free
 Các file chương trình của kĩ thuật này là như nhau và hầu như chỉ khác phiên bản glibc nên ta sẽ phân tích một lượt chương trình ở đây:
 ### IDA
 ```c=
@@ -309,7 +309,7 @@ def read():
 ```
 ---
 
-### 1.1 GLIBC 2.23
+### GLIBC 2.23
 Đây là phiên bản libc khá cũ và chưa có **Tcache**, hoạt động chính trên **Fast Bin** và các cơ chế bảo mật còn khá sơ sài.
 
 #### EXPLOIT
@@ -471,7 +471,7 @@ er()
 p.interactive()
 ```
 ---
-### 1.2 GLIBC 2.31
+### GLIBC 2.31
 Đây là phiên bản libc phổ thông và đã có **Tcache**, ngoài ra không có thêm các cơ chế bảo mật nào đáng kể. 
 
 #### EXPLOIT
@@ -641,7 +641,7 @@ p.interactive()
 ```
 ---
 
-### 1.3 GLIBC 2.35
+### GLIBC 2.35
 Ở phiên bản libc này đã có **Tcache** và đồng thời đã tích hợp thêm cơ chế **Safe Linking** (đã được thêm vào từ phiên bản Glibc 2.32) cho cơ chế liên kết đơn của các chunk trong **Tcache** và **Fast bin**, đồng thời là cơ chế **Malloc Aligned Tcache** kiểm tra các chunk, Pointer để đảm bảo bảo mật cho việc cấp phát.
 > Safe Linking
 > -
@@ -1071,7 +1071,7 @@ p.interactive()
 ```
 ---
 
-## 2. Tcache Poisoning
+## Tcache Poisoning
 ### IDA
 Ta có hàm `main()` được decompile:
 
@@ -1139,7 +1139,7 @@ def rd(idx):
 ```
 ---
 
-### 2.1 GLIBC 2.31
+### GLIBC 2.31
 Đây là phiên bản libc phổ thông và đã có **Tcache**, ngoài ra không có thêm các cơ chế bảo mật nào đáng kể. 
 
 #### EXPLOIT
@@ -1298,7 +1298,7 @@ rm(2)
 p.interactive()
 ```
 ---
-### 2.2 GLIBC 2.32
+### GLIBC 2.32
 Tại phiên bản này đã được thêm vào **Tcache** và có cơ chế bảo vệ **Safe Linking** và **Malloc Alignment Tcache** với nguyên lý hoạt động đã được nêu ở trên nên ta sẽ có thêm 2 hàm `gen()` và `de()` được thêm vào trong script.
 ```python3=
 def gen(pos, ptr):
