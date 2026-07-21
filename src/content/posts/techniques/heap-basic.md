@@ -3,7 +3,7 @@ title: Heap Fundamental
 published: 2025-05-02
 updated: 2025-05-02
 description: "Heap Basic"
-cover: "/assets/images/linhly.jpg"
+cover: "./heap-basic/1.png"
 coverInContent: false
 category:
   - Techniques
