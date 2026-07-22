@@ -179,11 +179,11 @@ Các chunk được lưu trữ tại **Small bin** và **Large bin** đều ở 
 Ở phần kiến thức Heap này, ta có 2 kĩ thuật khai thác cơ bản đó là **Double Free** và **Tcache Poisoning**. 2 kĩ thuật này đều tận dụng lỗ hỏng **Use After Free** là nền tảng khai thác:
 
 ## Use After Free
----
+
 Đây là lỗ hỏng được tạo ra từ việc thực hiện free một chunk nhưng không set NULL cho biến con trỏ chứa con trỏ đến chunk vừa free. Vì vậy sau khi free, con trỏ vẫn có thể được tái sử dụng cho các mục đích khác và thậm chí là leak dữ liệu.
 
 ## Double Free
----
+
 Từ cơ chế của lỗ hỏng **Use After Free**, ta hoàn toàn có thể thao túng con trỏ chunk đã được free để làm mọi thứ và kể cả là một lần free nữa. 
 
 Với việc free 2 lần cùng một chunk sẽ kiến cho các ngăn xếp chunk nhầm lẫn và vô tình xếp một chunk vào 2 lần vào bin, điều này làm thay đổi con trỏ liên kết trong chuỗi liên kết đơn các chunk và có thể dẫn đến việc cấp phát tùy ý, qua đó ta có thể sử dụng để ghi đè hoặc đọc ra các dữ liệu nhạy cảm của hệ thống.
@@ -193,13 +193,13 @@ Hàm `free()` cũng có cơ chế nhằm chống lại kĩ thuật này tùy thu
 Đó là sẽ kiểm tra xem chunk được yêu cầu free có đang nằm ở đầu danh sách hay không (đối với Fast bin) và sẽ kiểm tra key được thêm vào chunk trong quá trình free (đối với Tcache). Nên ta cần bypas qua 2 điều kiện này để thực hiện kĩ thuật.
 
 ## Tcache Poisoning
----
+
 Đây là kĩ thuật nhắm vào cơ chế liên kết đơn của các chunk trong **Tcache**. Kĩ thuật có thể được thực hiện dựa vào **Double Free**. 
 
 Nghĩa là sau khi vào **Tcache** các chunk sẽ có con trỏ để trỏ đến các chunk tiếp theo trong ngăn xếp và ta sẽ thay đổi con trỏ đó và kéo theo là việc chunk ở phía trước cũng sẽ thay đổi thành địa chỉ ta mong muốn, phục vụ cho công việc khai thác.
 
 # Practice Task Challenge
-Với 2 kĩ thuật trên thì ở mỗi kĩ thuật còn có cách áp dụng và khai thác khác nhau dựa vào phiên bản của Glibc và đặc trưng của phiên bản đó.
+- Với 2 kĩ thuật trên thì ở mỗi kĩ thuật còn có cách áp dụng và khai thác khác nhau dựa vào phiên bản của Glibc và đặc trưng của phiên bản đó.
 ---
 
 ## Double Free
