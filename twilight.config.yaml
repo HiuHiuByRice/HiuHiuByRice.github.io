@@ -146,7 +146,7 @@ sidebar:
           paths: ["^/$", "^/archive$"]
 
 profile:
-  avatar: "/assets/images/linhly.jpg"
+  avatar: "/assets/images/hiu.jpg"
   name: "HiuHiu"
   bio: "Basic Pwn learner."
   links:
